@@ -1,0 +1,13 @@
+{
+  "Bools": [
+    {
+      "Value": false,
+      "DefaultValue": false,
+      "Key": "withVshp",
+      "Name": "VocalShifter プロジェクトを保存する",
+      "Description": "音声保存時に VocalShifter プロジェクトを保存する",
+      "Order": 0,
+      "Hide": false
+    }
+  ]
+}
