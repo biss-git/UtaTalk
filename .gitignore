@@ -3,3 +3,5 @@ bin
 obj
 voice
 packages
+vslib.dll
+vslib_x64.dll
