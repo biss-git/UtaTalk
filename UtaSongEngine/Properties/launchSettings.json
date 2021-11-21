@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "UtaSongEngine": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\kikuchi\\source\\repos\\YomiageLibrary\\Yomiage.GUI\\bin\\Debug\\net5.0-windows\\win10-x64\\Yomiage.GUI.exe"
+    }
+  }
+}

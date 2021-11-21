@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VSLIB.NET;
 using Yomiage.SDK;
 using Yomiage.SDK.Config;
+using Yomiage.SDK.FileConverter;
 using Yomiage.SDK.Settings;
 using Yomiage.SDK.Talk;
 using Yomiage.SDK.VoiceEffects;
@@ -16,6 +17,8 @@ namespace UtaSongEngine
 {
     public class UtaSongEngine : IVoiceEngine
     {
+        public IFileConverter FileConverter { get; } = new FileConverter();
+
         private bool isPlaying = false;
         private bool stopFlag = false;
         private string ConfigDirectory;
@@ -58,6 +61,7 @@ namespace UtaSongEngine
 
         public void Dispose()
         {
+            FileConverter?.Dispose();
         }
 
         public void Initialize(string configDirectory, string dllDirectory, EngineConfig config)
@@ -66,6 +70,11 @@ namespace UtaSongEngine
             this.Config = config;
             this.ConfigDirectory = configDirectory;
             this.DllDirectory = dllDirectory;
+
+            if (FileConverter is FileConverter converter)
+            {
+                converter.Config = config;
+            }
         }
 
         public async Task<double[]> Play(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz)
@@ -100,7 +109,7 @@ namespace UtaSongEngine
                     pauseTime += talkScript.EndSection.Pause.Span_ms;
                 }
                 isPlaying = false;
-
+                stopFlag = false;
                 return new double[fs * pauseTime / 1000];
             }
 
@@ -140,6 +149,11 @@ namespace UtaSongEngine
                 moraList.Add((vowel + " R", talkScript.EndSection));
                 LastChar = string.Empty;
             }
+
+            voicePreset.VoiceEffect.Volume ??= voicePreset.Library.Config.VolumeSetting.DefaultValue;
+            voicePreset.VoiceEffect.Speed ??= voicePreset.Library.Config.SpeedSetting.DefaultValue;
+            voicePreset.VoiceEffect.Pitch ??= voicePreset.Library.Config.PitchSetting.DefaultValue;
+            voicePreset.VoiceEffect.Emphasis ??= voicePreset.Library.Config.EmphasisSetting.DefaultValue;
 
             var volumeValue = voicePreset.VoiceEffect.Volume.Value * masterEffect.Volume.Value;
             var speedValue = voicePreset.VoiceEffect.Speed.Value * masterEffect.Speed.Value;
@@ -247,6 +261,19 @@ namespace UtaSongEngine
                     fixedList_Sample, fix);
             }
 
+            if (waveList.Count == 0)
+            {
+                // 音が一切ない場合はポーズ分の時間だけ無音を返す。
+                var pause_ms = 0;
+                talkScript.Sections.ForEach(s =>
+                {
+                    pause_ms += s.Pause.Span_ms;
+                });
+                pause_ms += talkScript.EndSection.Pause.Span_ms;
+                isPlaying = false;
+                stopFlag = false;
+                return new double[pause_ms * fs / 1000];
+            }
 
             var project = new VSProject();
             {
@@ -612,8 +639,10 @@ namespace UtaSongEngine
 
             var result = new List<double>();
             result.AddRange(dataL.Select(v => (double)v / 32768));
-            var endPauseSampleNum = (int)(fs * masterEffect.EndPause / 1000);
-            if (endPauseSampleNum > 0) { result.AddRange(new double[endPauseSampleNum]); }
+
+            // 歌では文末ポーズは適用しない
+            //var endPauseSampleNum = (int)(fs * masterEffect.EndPause / 1000);
+            //if (endPauseSampleNum > 0) { result.AddRange(new double[endPauseSampleNum]); }
 
             return result.ToArray();
         }

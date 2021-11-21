@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VSLIB.NET;
 using Yomiage.SDK;
 using Yomiage.SDK.Config;
+using Yomiage.SDK.FileConverter;
 using Yomiage.SDK.Settings;
 using Yomiage.SDK.Talk;
 using Yomiage.SDK.VoiceEffects;
@@ -16,6 +17,7 @@ namespace UtaTalkEngine
 {
     public class UtaTalkEngine : IVoiceEngine
     {
+        public IFileConverter FileConverter { get; }
         private bool isPlaying = false;
         private bool stopFlag = false;
         private string ConfigDirectory;
@@ -85,12 +87,12 @@ namespace UtaTalkEngine
                 }
             }
 
-            if(talkScript.MoraCount == 0)
+            if (talkScript.MoraCount == 0)
             {
                 var pauseTime = 0;
                 foreach (var section in talkScript.Sections)
                 {
-                    if(section.Pause.Type != PauseType.None)
+                    if (section.Pause.Type != PauseType.None)
                     {
                         pauseTime += section.Pause.Span_ms;
                     }
@@ -100,6 +102,7 @@ namespace UtaTalkEngine
                     pauseTime += talkScript.EndSection.Pause.Span_ms;
                 }
                 isPlaying = false;
+                stopFlag = false;
                 return new double[fs * pauseTime / 1000];
             }
 
@@ -126,15 +129,15 @@ namespace UtaTalkEngine
                     mora.Emphasis = section.Emphasis;
                     {
                         // アクセントの計算
-                        var accentValue = 
+                        var accentValue =
                             (mora == section.Moras.FirstOrDefault() || mora == section.Moras.Last()) ? 0.5 : 1.5
                             + (isSecondSection ? -1 : 0);
-                        if(section.Moras.All(m => m.Accent == section.Moras.FirstOrDefault().Accent))
+                        if (section.Moras.All(m => m.Accent == section.Moras.FirstOrDefault().Accent))
                         {
                             // h タイプ
                             // 特になし
                         }
-                        else if(section.Moras.FirstOrDefault()?.Accent == true && !section.Moras.FirstOrDefault()?.Accent == true)
+                        else if (section.Moras.FirstOrDefault()?.Accent == true && !section.Moras.FirstOrDefault()?.Accent == true)
                         {
                             // hl タイプ
                             if (mora.Accent)
@@ -148,7 +151,7 @@ namespace UtaTalkEngine
                                 accentValue += -2 + 4.0 * (section.Moras.Count - index - 1) / num;
                             }
                         }
-                        else if(!section.Moras.FirstOrDefault()?.Accent == true && section.Moras.FirstOrDefault()?.Accent == true)
+                        else if (!section.Moras.FirstOrDefault()?.Accent == true && section.Moras.FirstOrDefault()?.Accent == true)
                         {
                             // lh タイプ
                             if (mora.Accent)
@@ -169,11 +172,11 @@ namespace UtaTalkEngine
                             {
                                 accentValue += 2;
                             }
-                            else if(section.Moras.Count > 0)
+                            else if (section.Moras.Count > 0)
                             {
                                 var hindex = section.Moras.IndexOf(section.Moras.First(m => m.Accent));
                                 var index = section.Moras.IndexOf(mora);
-                                if(index < hindex)
+                                if (index < hindex)
                                 {
                                     accentValue += -2 + 4.0 * index / hindex;
                                 }
@@ -218,7 +221,7 @@ namespace UtaTalkEngine
                 LastChar = string.Empty;
             }
 
-            if(talkScript.EndSection.EndSymbol == "？")
+            if (talkScript.EndSection.EndSymbol == "？")
             {
                 talkScript.EndSection.SetAccent(10);
                 var lastMora = talkScript.Sections.Last().Moras.Last();
@@ -312,7 +315,7 @@ namespace UtaTalkEngine
                         // timingEdit += 0.85 * 200 / 1000.0 / ((double)mora.Item2.Speed * speedValue);
                         // timingEdit += 0.85 * (MoraUtility.GetMoraSpan_ms(mora.Item1) + 200) / 2 / 1000.0 / ((double)mora.Item2.Speed * speedValue);
                         var index = moraList.IndexOf(mora);
-                        if(index + 1 < moraList.Count)
+                        if (index + 1 < moraList.Count)
                         {
                             // 次の発音の子音に依存するので、次の発音の長さをやや重視する。
                             timingEdit += 0.85 * (MoraUtility.GetMoraSpan_ms(mora.Item1) + MoraUtility.GetMoraSpan_ms(moraList[index + 1].Item1) + 1 * 200) / 3 / 1000.0 / ((double)mora.Item2.Speed * speedValue);
@@ -330,6 +333,19 @@ namespace UtaTalkEngine
                     fixedList_Sample, fix);
             }
 
+            if (waveList.Count == 0)
+            {
+                // 音が一切ない場合はポーズ分の時間だけ無音を返す。
+                var pause_ms = 0;
+                talkScript.Sections.ForEach(s =>
+                {
+                    pause_ms += s.Pause.Span_ms;
+                });
+                pause_ms += talkScript.EndSection.Pause.Span_ms;
+                isPlaying = false;
+                stopFlag = false;
+                return new double[pause_ms * fs / 1000];
+            }
 
             var project = new VSProject();
             {
@@ -379,9 +395,9 @@ namespace UtaTalkEngine
                         {
                             threshold = Math.Clamp(voicePreset.Library.Settings.Doubles["comp"].Value, 0.01, 1);
                         }
-                        for (int i=0; i<ctrlPoints.Length; i++)
+                        for (int i = 0; i < ctrlPoints.Length; i++)
                         {
-                            if(ctrlPoints[i].DynEdit > 0.2)
+                            if (ctrlPoints[i].DynEdit > 0.2)
                             {
                                 ctrlPoints[i].DynEdit = Math.Sqrt(ctrlPoints[i].DynEdit * 0.2);
                             }
@@ -432,20 +448,20 @@ namespace UtaTalkEngine
                     {
                         // ピッチの平滑化
                         const int l = 30;
-                        for(int i =l; i<ctrlPoints.Length - l; i++)
+                        for (int i = l; i < ctrlPoints.Length - l; i++)
                         {
                             var pitch = 0;
                             var num = 0;
-                            if(ctrlPoints[i].PitOrg <= 2000) { continue; }
-                            for(int j= i-l; j< i+l; j++)
+                            if (ctrlPoints[i].PitOrg <= 2000) { continue; }
+                            for (int j = i - l; j < i + l; j++)
                             {
-                                if(ctrlPoints[j].PitOrg > 2000)
+                                if (ctrlPoints[j].PitOrg > 2000)
                                 {
                                     pitch += ctrlPoints[j].PitOrg;
                                     num += 1;
                                 }
                             }
-                            if(num > 1)
+                            if (num > 1)
                             {
                                 ctrlPoints[i].PitEdit = pitch / num;
                             }
@@ -542,7 +558,7 @@ namespace UtaTalkEngine
                                 var d1 = fixedEdits_Sample[i - 1] - timingEdits_Sample[i - 1];
                                 var d2 = timingEdits_Sample[i] - startEdits_Sample[i];
                                 var dt1 = dt * d1 / (d1 + d2);
-                                var middle = timingEdits_Sample[i-1] + dt1;
+                                var middle = timingEdits_Sample[i - 1] + dt1;
                                 startEdits_Sample[i] = middle;
                                 fixedEdits_Sample[i - 1] = middle;
                             }

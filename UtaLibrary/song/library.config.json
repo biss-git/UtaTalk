@@ -8,8 +8,8 @@
   ],
   "OS": "Windows",
   "AssmblyName": "../UtaLibrary.v1.dll",
-  "ModuleName": "UtaLibrary.v1.dll",
-  "TypeName": "UtaLibrary.UtaLibrary",
+  //"ModuleName": "UtaLibrary.v1.dll",
+  //"TypeName": "UtaLibrary.UtaLibrary",
   "Language": "Japanese",
   "VolumeSetting": {
     "Unit": "[倍]",

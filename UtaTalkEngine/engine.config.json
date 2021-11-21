@@ -40,8 +40,8 @@
   ],
   "OS": "Windows",
   "AssmblyName": "UtaTalkEngine.v1.dll",
-  "ModuleName": "UtaTalkEngine.v1.dll",
-  "TypeName": "UtaTalkEngine.UtaTalkEngine",
+  //"ModuleName": "UtaTalkEngine.v1.dll",
+  //"TypeName": "UtaTalkEngine.UtaTalkEngine",
   "Language": "Japanese",
   "VolumeSetting": {
     "Unit": "倍",

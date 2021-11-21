@@ -40,8 +40,8 @@
   ],
   "OS": "Windows",
   "AssmblyName": "UtaSongEngine.v1.dll",
-  "ModuleName": "UtaSongEngine.v1.dll",
-  "TypeName": "UtaSongEngine.UtaSongEngine",
+  //"ModuleName": "UtaSongEngine.v1.dll",
+  //"TypeName": "UtaSongEngine.UtaSongEngine",
   "Language": "Japanese",
   "VolumeSetting": {
     "Unit": "倍",
@@ -65,8 +65,8 @@
     "DefaultValue": 100,
     "Min": 50,
     "MinExtend": 30,
-    "Max": 200,
-    "MaxExtend": 300,
+    "Max": 400,
+    "MaxExtend": 1200,
     "SmallStep": 1,
     "StringFormat": "0",
     "Key": "SPD",
@@ -198,7 +198,7 @@
       "Description": "いわゆるベロシティ的なもの",
       "Type": "Mora",
       "Hide": false,
-      "Color": "#006400",
+      "Color": "#51FF97",
       "IconKind": "SolidCommentDots"
     },
     {
@@ -216,7 +216,7 @@
       "Description": "ピッチいじりたい人向け",
       "Type": "Curve",
       "Hide": false,
-      "Color": "#006400",
+      "Color": "#FFBC51",
       "IconKind": "RegularBoltCircle"
     },
     {
@@ -234,6 +234,7 @@
       "Description": "フォルマントの補正値",
       "Type": "Curve",
       "Hide": false,
+      "Color": "#FF51A8",
       "IconKind": "LogosFoursquare"
     }
   ]
