@@ -1,7 +1,17 @@
 {
+  "Key": "UtaTalkEngine",
+  "Name": "UtaTalkエンジン",
+  "Description": "UTAU音源を利用したトークエンジン",
+  "OS": "Windows",
+  "Language": "Japanese",
+  "AssemblyName": "UtaTalkEngine.v1.dll",
+  //"ModuleName": "UtaTalkEngine.v1.dll",
+  //"TypeName": "UtaTalkEngine.UtaTalkEngine",
+  "LibraryFormat": [
+    "UtaTalk"
+  ],
   "AccentEnable": true,
   "AccentHide": false,
-  "AccentRule": null,
   "SubPresetEnable": false,
   "EngineSaveEnable": true,
   "ShortPauseSetting": {
@@ -32,17 +42,6 @@
     "Type": "",
     "Hide": false
   },
-  "Key": "UtaTalkEngine",
-  "Name": "UtaTalkエンジン",
-  "Description": "UTAU音源を利用したトークエンジン",
-  "LibraryFormat": [
-    "UtaTalk"
-  ],
-  "OS": "Windows",
-  "AssmblyName": "UtaTalkEngine.v1.dll",
-  //"ModuleName": "UtaTalkEngine.v1.dll",
-  //"TypeName": "UtaTalkEngine.UtaTalkEngine",
-  "Language": "Japanese",
   "VolumeSetting": {
     "Unit": "倍",
     "Value": 1,

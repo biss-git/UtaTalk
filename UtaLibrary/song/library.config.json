@@ -1,16 +1,15 @@
 {
-  "Styles": [],
   "Key": "UtaSongLibrary",
   "Name": "つくよみちゃん ソング",
   "Description": "UTAU音源を利用するライブラリ",
+  "OS": "Windows",
+  "Language": "Japanese",
+  "AssemblyName": "../UtaLibrary.v1.dll",
+  //"ModuleName": "UtaLibrary.v1.dll",
+  //"TypeName": "UtaLibrary.UtaLibrary",
   "LibraryFormat": [
     "UtaSong"
   ],
-  "OS": "Windows",
-  "AssmblyName": "../UtaLibrary.v1.dll",
-  //"ModuleName": "UtaLibrary.v1.dll",
-  //"TypeName": "UtaLibrary.UtaLibrary",
-  "Language": "Japanese",
   "VolumeSetting": {
     "Unit": "[倍]",
     "Value": 1,

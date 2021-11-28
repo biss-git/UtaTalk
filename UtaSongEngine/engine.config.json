@@ -1,7 +1,17 @@
 {
+  "Key": "UtaSongEngine",
+  "Name": "UtaSongエンジン",
+  "Description": "UTAU音源を利用したソングエンジン",
+  "OS": "Windows",
+  "Language": "Japanese",
+  "AssemblyName": "UtaSongEngine.v1.dll",
+  //"ModuleName": "UtaSongEngine.v1.dll",
+  //"TypeName": "UtaSongEngine.UtaSongEngine",
+  "LibraryFormat": [
+    "UtaSong"
+  ],
   "AccentEnable": true,
   "AccentHide": false,
-  "AccentRule": null,
   "SubPresetEnable": false,
   "EngineSaveEnable": true,
   "ShortPauseSetting": {
@@ -32,17 +42,6 @@
     "Type": "",
     "Hide": false
   },
-  "Key": "UtaSongEngine",
-  "Name": "UtaSongエンジン",
-  "Description": "UTAU音源を利用したソングエンジン",
-  "LibraryFormat": [
-    "UtaSong"
-  ],
-  "OS": "Windows",
-  "AssmblyName": "UtaSongEngine.v1.dll",
-  //"ModuleName": "UtaSongEngine.v1.dll",
-  //"TypeName": "UtaSongEngine.UtaSongEngine",
-  "Language": "Japanese",
   "VolumeSetting": {
     "Unit": "倍",
     "Value": 1,

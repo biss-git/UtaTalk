@@ -1,16 +1,15 @@
 {
-  "Styles": [],
   "Key": "UtaTalkLibrary",
   "Name": "つくよみちゃん トーク",
   "Description": "UTAU音源を利用するライブラリ",
+  "OS": "Windows",
+  "Language": "Japanese",
+  "AssemblyName": "../UtaLibrary.v1.dll",
+  //"ModuleName": "UtaLibrary.v1.dll",
+  //"TypeName": "UtaLibrary.UtaLibrary",
   "LibraryFormat": [
     "UtaTalk"
   ],
-  "OS": "Windows",
-  "AssmblyName": "../UtaLibrary.v1.dll",
-  //"ModuleName": "UtaLibrary.v1.dll",
-  //"TypeName": "UtaLibrary.UtaLibrary",
-  "Language": "Japanese",
   "VolumeSetting": {
     "Unit": "[倍]",
     "Value": 1,
