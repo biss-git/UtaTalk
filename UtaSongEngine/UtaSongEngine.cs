@@ -77,7 +77,7 @@ namespace UtaSongEngine
             }
         }
 
-        public async Task<double[]> Play(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz)
+        public async Task<double[]> Play(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz, Action<double[]> submitPartWave)
         {
             StateText = "再生されました。";
             if (isPlaying) { return null; }
@@ -154,6 +154,10 @@ namespace UtaSongEngine
             voicePreset.VoiceEffect.Speed ??= voicePreset.Library.Config.SpeedSetting.DefaultValue;
             voicePreset.VoiceEffect.Pitch ??= voicePreset.Library.Config.PitchSetting.DefaultValue;
             voicePreset.VoiceEffect.Emphasis ??= voicePreset.Library.Config.EmphasisSetting.DefaultValue;
+            masterEffect.Volume ??= 1;
+            masterEffect.Speed ??= 1;
+            masterEffect.Pitch ??= 1;
+            masterEffect.Emphasis ??= 1;
 
             var volumeValue = voicePreset.VoiceEffect.Volume.Value * masterEffect.Volume.Value;
             var speedValue = voicePreset.VoiceEffect.Speed.Value * masterEffect.Speed.Value;
@@ -675,7 +679,7 @@ namespace UtaSongEngine
 
             foreach (var script in talkScripts)
             {
-                var wave = await Play(voicePreset, subPreset, script, masterEffect, x => fs = x);
+                var wave = await Play(voicePreset, subPreset, script, masterEffect, x => fs = x, x => { });
                 if (wave != null && wave.Length > 0)
                     waveList.AddRange(wave);
             }
@@ -744,5 +748,9 @@ namespace UtaSongEngine
             return !stopFlag;
         }
 
+        public async Task<TalkScript> GetDictionary(string text)
+        {
+            return null;
+        }
     }
 }

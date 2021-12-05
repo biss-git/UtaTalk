@@ -70,7 +70,7 @@ namespace UtaTalkEngine
             this.DllDirectory = dllDirectory;
         }
 
-        public async Task<double[]> Play(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz)
+        public async Task<double[]> Play(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz, Action<double[]> submitPartWave)
         {
             StateText = "再生されました。";
             if (isPlaying) { return null; }
@@ -106,6 +106,23 @@ namespace UtaTalkEngine
                 return new double[fs * pauseTime / 1000];
             }
 
+
+
+            voicePreset.VoiceEffect.Volume ??= voicePreset.Library.Config.VolumeSetting.DefaultValue;
+            voicePreset.VoiceEffect.Speed ??= voicePreset.Library.Config.SpeedSetting.DefaultValue;
+            voicePreset.VoiceEffect.Pitch ??= voicePreset.Library.Config.PitchSetting.DefaultValue;
+            voicePreset.VoiceEffect.Emphasis ??= voicePreset.Library.Config.EmphasisSetting.DefaultValue;
+            masterEffect.Volume ??= 1;
+            masterEffect.Speed ??= 1;
+            masterEffect.Pitch ??= 1;
+            masterEffect.Emphasis ??= 1;
+
+
+            var emphasisValue = voicePreset.VoiceEffect.Emphasis.Value * masterEffect.Emphasis.Value;
+            var pitchValue = voicePreset.VoiceEffect.Pitch.Value * masterEffect.Pitch.Value;
+
+
+
             foreach (var section in talkScript.Sections)
             {
                 if (LastChar != string.Empty)
@@ -124,9 +141,9 @@ namespace UtaTalkEngine
                 foreach (var mora in section.Moras)
                 {
                     mora.Volume = section.Volume;
-                    mora.Pitch = section.Pitch;
+                    mora.Pitch = section.Pitch * pitchValue;
                     mora.Speed = section.Speed * (mora == section.Moras.Last() ? 0.98 : 1);
-                    mora.Emphasis = section.Emphasis;
+                    mora.Emphasis = section.Emphasis * emphasisValue;
                     {
                         // アクセントの計算
                         var accentValue =
@@ -665,7 +682,7 @@ namespace UtaTalkEngine
 
             foreach (var script in talkScripts)
             {
-                var wave = await Play(voicePreset, subPreset, script, masterEffect, x => fs = x);
+                var wave = await Play(voicePreset, subPreset, script, masterEffect, x => fs = x, x => { });
                 if (wave != null && wave.Length > 0)
                 {
                     waveList.AddRange(wave);
@@ -736,5 +753,9 @@ namespace UtaTalkEngine
             return !stopFlag;
         }
 
+        public async Task<TalkScript> GetDictionary(string text)
+        {
+            return null;
+        }
     }
 }

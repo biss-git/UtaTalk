@@ -23,8 +23,6 @@
     "Key": "VOL",
     "Name": "音量",
     "Description": "",
-    "Order": 0,
-    "Type": "",
     "Hide": false
   },
   "SpeedSetting": {
@@ -40,8 +38,6 @@
     "Key": "SPD",
     "Name": "話速",
     "Description": "",
-    "Order": 0,
-    "Type": "",
     "Hide": false
   },
   "PitchSetting": {
@@ -57,8 +53,6 @@
     "Key": "PIT",
     "Name": "高さ",
     "Description": "",
-    "Order": 0,
-    "Type": "",
     "Hide": false
   },
   "EmphasisSetting": {
@@ -74,8 +68,6 @@
     "Key": "EMP",
     "Name": "抑揚",
     "Description": "",
-    "Order": 0,
-    "Type": "",
     "Hide": true
   },
   "AdditionalSettings": [
@@ -92,8 +84,6 @@
       "Key": "VibratoDepth",
       "Name": "ビブラート強さ",
       "Description": "ビブラートの強さ",
-      "Order": 0,
-      "Type": "",
       "Hide": false,
       "Color": "#006400"
     },
@@ -110,8 +100,6 @@
       "Key": "VibratoSpan",
       "Name": "ビブラート周期",
       "Description": "ビブラートの周期",
-      "Order": 0,
-      "Type": "",
       "Hide": false,
       "Color": "Transparent"
     },
@@ -128,8 +116,6 @@
       "Key": "Formant",
       "Name": "フォルマント",
       "Description": "フォルマント揺らぎの強さ",
-      "Order": 0,
-      "Type": "",
       "Hide": false
     }
   ]

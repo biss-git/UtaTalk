@@ -109,9 +109,6 @@ namespace UtaSongEngine
         public string OutputMora;
         public string Key;
         public double Pitch_Hz;
-
-
-
     }
 
     /// <summary>
