@@ -19,17 +19,19 @@
     "DefaultValue": 150,
     "Min": 80,
     "Max": 500,
-    "SmallStep": 10,
+    "SmallStep": 10
   },
   "LongPauseSetting": {
     "Value": 370,
     "DefaultValue": 370,
     "Min": 100,
     "Max": 2000,
-    "SmallStep": 10,
+    "SmallStep": 10
   },
   "VolumeSetting": {
+    "Name": "音量",
     "Unit": "倍",
+    "Description": "声の大きさ",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0,
@@ -38,13 +40,13 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Name": "音量",
-    "Description": "声の大きさ",
     "Type": "Section",
     "Hide": false
   },
   "SpeedSetting": {
+    "Name": "話速",
     "Unit": "倍",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0.5,
@@ -53,13 +55,13 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Name": "話速",
-    "Description": "",
     "Type": "Section",
     "Hide": false
   },
   "PitchSetting": {
+    "Name": "高さ",
     "Unit": "倍",
+    "Description": "音高",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0.5,
@@ -68,13 +70,13 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Name": "高さ",
-    "Description": "音高",
     "Type": "Section",
     "Hide": false
   },
   "EmphasisSetting": {
+    "Name": "抑揚",
     "Unit": "倍",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0,
@@ -83,8 +85,6 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Name": "抑揚",
-    "Description": "",
     "Type": "Section",
     "Hide": false
   }

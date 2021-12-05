@@ -11,7 +11,9 @@
     "UtaSong"
   ],
   "VolumeSetting": {
+    "Name": "音量",
     "Unit": "[倍]",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0,
@@ -20,13 +22,12 @@
     "MaxExtend": 2,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Key": "VOL",
-    "Name": "音量",
-    "Description": "",
     "Hide": false
   },
   "SpeedSetting": {
+    "Name": "話速",
     "Unit": "[倍]",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0.5,
@@ -35,13 +36,12 @@
     "MaxExtend": 3,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Key": "SPD",
-    "Name": "話速",
-    "Description": "",
     "Hide": false
   },
   "PitchSetting": {
+    "Name": "高さ",
     "Unit": "[キー]",
+    "Description": "",
     "Value": 0,
     "DefaultValue": 0,
     "Min": -12,
@@ -50,13 +50,12 @@
     "MaxExtend": 24,
     "SmallStep": 0.1,
     "StringFormat": "0.0",
-    "Key": "PIT",
-    "Name": "高さ",
-    "Description": "",
     "Hide": false
   },
   "EmphasisSetting": {
+    "Name": "抑揚",
     "Unit": "[倍]",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0,
@@ -65,14 +64,14 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Key": "EMP",
-    "Name": "抑揚",
-    "Description": "",
     "Hide": true
   },
   "AdditionalSettings": [
     {
+      "Key": "VibratoDepth",
+      "Name": "ビブラート強さ",
       "Unit": "[cent]",
+      "Description": "ビブラートの強さ",
       "Value": 20,
       "DefaultValue": 20,
       "Min": 0,
@@ -81,14 +80,14 @@
       "MaxExtend": 500,
       "SmallStep": 1,
       "StringFormat": "0",
-      "Key": "VibratoDepth",
-      "Name": "ビブラート強さ",
-      "Description": "ビブラートの強さ",
       "Hide": false,
-      "Color": "#006400"
+      "Color": "#FFBC51"
     },
     {
+      "Key": "VibratoSpan",
+      "Name": "ビブラート周期",
       "Unit": "[ms]",
+      "Description": "ビブラートの周期",
       "Value": 200,
       "DefaultValue": 200,
       "Min": 100,
@@ -97,14 +96,14 @@
       "MaxExtend": 1000,
       "SmallStep": 1,
       "StringFormat": "0",
-      "Key": "VibratoSpan",
-      "Name": "ビブラート周期",
-      "Description": "ビブラートの周期",
       "Hide": false,
-      "Color": "Transparent"
+      "Color": "#51FF97"
     },
     {
+      "Key": "Formant",
+      "Name": "フォルマント",
       "Unit": "[cent]",
+      "Description": "フォルマント揺らぎの強さ",
       "Value": 20,
       "DefaultValue": 20,
       "Min": 0,
@@ -113,10 +112,8 @@
       "MaxExtend": 500,
       "SmallStep": 1,
       "StringFormat": "0",
-      "Key": "Formant",
-      "Name": "フォルマント",
-      "Description": "フォルマント揺らぎの強さ",
-      "Hide": false
+      "Hide": false,
+      "Color": "#FF51A8"
     }
   ]
 }

@@ -1,54 +1,54 @@
 {
   "Ints": [
     {
+      "Key": "ShiftKey",
+      "Name": "音高差",
+      "Description": "GUIの音高基準がシの音なのでその差を入力。ドなら-100、ラ#なら100 みたいな感じ。",
       "Value": 0,
       "DefaultValue": 0,
       "Min": -1200,
       "Max": 1200,
       "SmallStep": 100,
-      "Key": "ShiftKey",
-      "Name": "音高差",
-      "Description": "GUIの音高基準がシの音なのでその差を入力。ドなら-100、ラ#なら100 みたいな感じ。",
       "Order": 0,
       "Hide": true
     },
     {
+      "Key": "BaseKey",
+      "Name": "基準音高",
+      "Description": "ケロケロ化するときに使用される基準音高。B3(247Hz)なら5900、C4(262Hz)なら6000、A#3(233Hz)なら5800 みたいな感じ",
       "Value": 5900,
       "DefaultValue": 5900,
       "Min": 0,
       "Max": 12000,
       "SmallStep": 100,
-      "Key": "BaseKey",
-      "Name": "基準音高",
-      "Description": "ケロケロ化するときに使用される基準音高。B3(247Hz)なら5900、C4(262Hz)なら6000、A#3(233Hz)なら5800 みたいな感じ",
       "Order": 0,
       "Hide": true
     }
   ],
   "Doubles": [
     {
+      "Key": "breath",
+      "Name": "ブレス音量",
+      "Description": "0:ブレスなし　1:ブレスあり　つくよみちゃんUTAU音源のようにRに息成分が入っている場合のみ有効。",
       "Value": 0.3,
       "DefaultValue": 0.3,
       "Min": 0,
       "Max": 1,
       "SmallStep": 0.01,
       "StringFormat": "0.00",
-      "Key": "breath",
-      "Name": "ブレス音量",
-      "Description": "0:ブレスなし　1:ブレスあり　つくよみちゃんUTAU音源のようにRに息成分が入っている場合のみ有効。",
       "Order": 0,
       "Hide": false
     },
     {
+      "Key": "comp",
+      "Name": "コンプレッサー閾値",
+      "Description": "この値より大きい音の音量を下げる",
       "Value": 0.2,
       "DefaultValue": 0.2,
       "Min": 0.01,
       "Max": 1,
       "SmallStep": 0.01,
       "StringFormat": "0.00",
-      "Key": "comp",
-      "Name": "コンプレッサー閾値",
-      "Description": "この値より大きい音の音量を下げる",
       "Order": 0,
       "Hide": true
     }

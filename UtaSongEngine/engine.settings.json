@@ -1,25 +1,25 @@
 {
   "Bools": [
     {
-      "Value": true,
-      "DefaultValue": true,
       "Key": "withVshp",
       "Name": "VocalShifter プロジェクトを保存する",
       "Description": "音声保存時に VocalShifter プロジェクトを保存する",
+      "Value": true,
+      "DefaultValue": true,
       "Order": 2,
       "Hide": false
     }
   ],
   "Ints": [
     {
+      "Key": "prePause",
+      "Name": "子音用待機時間",
+      "Description": "フレーズの最初に設ける余白時間。フレーズ先頭のポーズ時間と重複する。",
       "Value": 200,
       "DefaultValue": 200,
       "Min": 100,
       "Max": 500,
       "SmallStep": 1,
-      "Key": "prePause",
-      "Name": "子音用待機時間",
-      "Description": "フレーズの最初に設ける余白時間。フレーズ先頭のポーズ時間と重複する。",
       "Order": 1,
       "Type": "",
       "Hide": false
@@ -27,15 +27,15 @@
   ],
   "Doubles": [
     {
+      "Key": "kero",
+      "Name": "音高の平滑化",
+      "Description": "0:自然　  1:ケロケロボイス",
       "Value": 0,
       "DefaultValue": 0,
       "Min": 0,
       "Max": 1,
       "SmallStep": 0.01,
       "StringFormat": "0.00",
-      "Key": "kero",
-      "Name": "音高の平滑化",
-      "Description": "0:自然　  1:ケロケロボイス",
       "Order": 0,
       "Hide": false
     }

@@ -11,7 +11,9 @@
     "UtaTalk"
   ],
   "VolumeSetting": {
+    "Name": "音量",
     "Unit": "[倍]",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0,
@@ -20,13 +22,12 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Key": "VOL",
-    "Name": "音量",
-    "Description": "",
     "Hide": false
   },
   "SpeedSetting": {
+    "Name": "話速",
     "Unit": "[倍]",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0.5,
@@ -35,13 +36,12 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Key": "SPD",
-    "Name": "話速",
-    "Description": "",
     "Hide": false
   },
   "PitchSetting": {
+    "Name": "高さ",
     "Unit": "[倍]",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0.5,
@@ -50,13 +50,12 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Key": "PIT",
-    "Name": "高さ",
-    "Description": "",
     "Hide": false
   },
   "EmphasisSetting": {
+    "Name": "抑揚",
     "Unit": "[倍]",
+    "Description": "",
     "Value": 1,
     "DefaultValue": 1,
     "Min": 0,
@@ -65,9 +64,6 @@
     "MaxExtend": 5,
     "SmallStep": 0.01,
     "StringFormat": "0.00",
-    "Key": "EMP",
-    "Name": "抑揚",
-    "Description": "",
     "Hide": false
   }
 }

@@ -1,15 +1,15 @@
 ﻿{
   "Doubles": [
     {
+      "Key": "comp",
+      "Name": "コンプレッサー閾値",
+      "Description": "この値より大きい音の音量を下げる",
       "Value": 0.2,
       "DefaultValue": 0.2,
       "Min": 0.01,
       "Max": 1,
       "SmallStep": 0.01,
       "StringFormat": "0.00",
-      "Key": "comp",
-      "Name": "コンプレッサー閾値",
-      "Description": "この値より大きい音の音量を下げる",
       "Order": 0,
       "Hide": true
     }
