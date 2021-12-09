@@ -15,14 +15,12 @@ using Yomiage.SDK.VoiceEffects;
 
 namespace UtaSongEngine
 {
-    public class UtaSongEngine : IVoiceEngine
+    public class UtaSongEngine : VoiceEngineBase
     {
-        public IFileConverter FileConverter { get; } = new FileConverter();
+        public override IFileConverter FileConverter { get; } = new FileConverter();
 
         private bool isPlaying = false;
         private bool stopFlag = false;
-        private string ConfigDirectory;
-        private string DllDirectory;
         private int fs = 44100;
         private Version version
         {
@@ -34,42 +32,39 @@ namespace UtaSongEngine
                 return asm.GetName().Version;
             }
         }
-        public int MajorVersion => version.Major;
-        public int MinorVersion => version.Minor;
+        public override int MajorVersion => version.Major;
+        public override int MinorVersion => version.Minor;
 
-        public EngineConfig Config { get; private set; }
+        public override bool IsActivated => true;
 
-        public EngineSettings Settings { get; set; }
+        public override bool IsEnable => !isPlaying;
 
-        public bool IsActivated => true;
+        public override string StateText { get; protected set; } = string.Empty;
 
-        public bool IsEnable => !isPlaying;
-
-        public string StateText { get; private set; } = string.Empty;
-
-        public async Task<bool> Activate(string key)
+        public override async Task<bool> Activate(string key)
         {
+            await Task.Delay(100);
             StateText = "アクティベートされました。";
             return true;
         }
 
-        public async Task<bool> DeActivate()
+        public override async Task<bool> DeActivate()
         {
+            await Task.Delay(100);
             StateText = "ディアクティベートされました。";
             return false;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             FileConverter?.Dispose();
         }
 
-        public void Initialize(string configDirectory, string dllDirectory, EngineConfig config)
+        public override void Initialize(string configDirectory, string dllDirectory, EngineConfig config)
         {
+            base.Initialize(configDirectory, dllDirectory, config);
+
             StateText = "初期化されました。  ";
-            this.Config = config;
-            this.ConfigDirectory = configDirectory;
-            this.DllDirectory = dllDirectory;
 
             if (FileConverter is FileConverter converter)
             {
@@ -77,8 +72,9 @@ namespace UtaSongEngine
             }
         }
 
-        public async Task<double[]> Play(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz, Action<double[]> submitPartWave)
+        public override async Task<double[]> Play(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz, Action<double[]> submitPartWave)
         {
+            await Task<double[]>.Delay(10);
             StateText = "再生されました。";
             if (isPlaying) { return null; }
             isPlaying = true;
@@ -669,7 +665,7 @@ namespace UtaSongEngine
             return values[i2] * rate + values[i1] * (1 - rate);
         }
 
-        public async Task Save(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript[] talkScripts, MasterEffectValue masterEffect, string filePath, int startPause, int endPause, bool saveWithText, Encoding encoding)
+        public override async Task Save(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript[] talkScripts, MasterEffectValue masterEffect, string filePath, int startPause, int endPause, bool saveWithText, Encoding encoding)
         {
             var fs = 44100;
             var waveList = new List<double>();
@@ -736,7 +732,7 @@ namespace UtaSongEngine
             }
         }
 
-        public async Task<bool> Stop()
+        public override async Task<bool> Stop()
         {
             if (!isPlaying) { return true; }
             stopFlag = true;
@@ -748,8 +744,9 @@ namespace UtaSongEngine
             return !stopFlag;
         }
 
-        public async Task<TalkScript> GetDictionary(string text)
+        public override async Task<TalkScript> GetDictionary(string text)
         {
+            await Task.Delay(100);
             return null;
         }
     }

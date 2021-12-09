@@ -15,13 +15,12 @@ using Yomiage.SDK.VoiceEffects;
 
 namespace UtaTalkEngine
 {
-    public class UtaTalkEngine : IVoiceEngine
+    public class UtaTalkEngine : VoiceEngineBase
     {
-        public IFileConverter FileConverter { get; }
+        public override IFileConverter FileConverter { get; }
+
         private bool isPlaying = false;
         private bool stopFlag = false;
-        private string ConfigDirectory;
-        private string DllDirectory;
         private int fs = 44100;
         private Version version
         {
@@ -33,45 +32,42 @@ namespace UtaTalkEngine
                 return asm.GetName().Version;
             }
         }
-        public int MajorVersion => version.Major;
-        public int MinorVersion => version.Minor;
+        public override int MajorVersion => version.Major;
+        public override int MinorVersion => version.Minor;
 
-        public EngineConfig Config { get; private set; }
+        public override bool IsActivated => true;
 
-        public EngineSettings Settings { get; set; }
+        public override bool IsEnable => !isPlaying;
 
-        public bool IsActivated => true;
+        public override string StateText { get; protected set; } = string.Empty;
 
-        public bool IsEnable => !isPlaying;
-
-        public string StateText { get; private set; } = string.Empty;
-
-        public async Task<bool> Activate(string key)
+        public override async Task<bool> Activate(string key)
         {
+            await Task.Delay(100);
             StateText = "アクティベートされました。";
             return true;
         }
 
-        public async Task<bool> DeActivate()
+        public override async Task<bool> DeActivate()
         {
+            await Task.Delay(100);
             StateText = "ディアクティベートされました。";
             return false;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
         }
 
-        public void Initialize(string configDirectory, string dllDirectory, EngineConfig config)
+        public override void Initialize(string configDirectory, string dllDirectory, EngineConfig config)
         {
             StateText = "初期化されました。  ";
-            this.Config = config;
-            this.ConfigDirectory = configDirectory;
-            this.DllDirectory = dllDirectory;
+            base.Initialize(configDirectory, dllDirectory, config);
         }
 
-        public async Task<double[]> Play(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz, Action<double[]> submitPartWave)
+        public override async Task<double[]> Play(VoiceConfig mainVoice, VoiceConfig subVoice, TalkScript talkScript, MasterEffectValue masterEffect, Action<int> setSamplingRate_Hz, Action<double[]> submitWavePart)
         {
+            await Task.Delay(10);
             StateText = "再生されました。";
             if (isPlaying) { return null; }
             isPlaying = true;
@@ -81,7 +77,7 @@ namespace UtaTalkEngine
 
             fs = 44100;
             {
-                if (voicePreset.Library.TryGetValue<int>("fs", "", out var fs_lib))
+                if (mainVoice.Library.TryGetValue<int>("fs", "", out var fs_lib))
                 {
                     fs = fs_lib;
                 }
@@ -108,18 +104,18 @@ namespace UtaTalkEngine
 
 
 
-            voicePreset.VoiceEffect.Volume ??= voicePreset.Library.Config.VolumeSetting.DefaultValue;
-            voicePreset.VoiceEffect.Speed ??= voicePreset.Library.Config.SpeedSetting.DefaultValue;
-            voicePreset.VoiceEffect.Pitch ??= voicePreset.Library.Config.PitchSetting.DefaultValue;
-            voicePreset.VoiceEffect.Emphasis ??= voicePreset.Library.Config.EmphasisSetting.DefaultValue;
+            mainVoice.VoiceEffect.Volume ??= mainVoice.Library.Config.VolumeSetting.DefaultValue;
+            mainVoice.VoiceEffect.Speed ??= mainVoice.Library.Config.SpeedSetting.DefaultValue;
+            mainVoice.VoiceEffect.Pitch ??= mainVoice.Library.Config.PitchSetting.DefaultValue;
+            mainVoice.VoiceEffect.Emphasis ??= mainVoice.Library.Config.EmphasisSetting.DefaultValue;
             masterEffect.Volume ??= 1;
             masterEffect.Speed ??= 1;
             masterEffect.Pitch ??= 1;
             masterEffect.Emphasis ??= 1;
 
 
-            var emphasisValue = voicePreset.VoiceEffect.Emphasis.Value * masterEffect.Emphasis.Value;
-            var pitchValue = voicePreset.VoiceEffect.Pitch.Value * masterEffect.Pitch.Value;
+            var emphasisValue = mainVoice.VoiceEffect.Emphasis.Value * masterEffect.Emphasis.Value;
+            var pitchValue = mainVoice.VoiceEffect.Pitch.Value * masterEffect.Pitch.Value;
 
 
 
@@ -245,8 +241,8 @@ namespace UtaTalkEngine
                 lastMora.SetAccent(lastMora.GetAccent() + 2);
             }
 
-            var volumeValue = voicePreset.VoiceEffect.Volume.Value * masterEffect.Volume.Value;
-            var speedValue = voicePreset.VoiceEffect.Speed.Value * masterEffect.Speed.Value;
+            var volumeValue = mainVoice.VoiceEffect.Volume.Value * masterEffect.Volume.Value;
+            var speedValue = mainVoice.VoiceEffect.Speed.Value * masterEffect.Speed.Value;
             speedValue = Math.Clamp(speedValue, 0.1, 10);
 
             var prePause = 0.2;
@@ -281,19 +277,19 @@ namespace UtaTalkEngine
             var timingEdit = prePause / speedValue;
             foreach (var mora in moraList)
             {
-                if (!voicePreset.Library.TryGetValue("wave", mora.Item1, out double[] wave))
+                if (!mainVoice.Library.TryGetValue("wave", mora.Item1, out double[] wave))
                 {
                     wave = new double[0];
                 }
-                if (!voicePreset.Library.TryGetValue("timing", mora.Item1, out int timing))
+                if (!mainVoice.Library.TryGetValue("timing", mora.Item1, out int timing))
                 {
                     timing = 0;
                 }
-                if (!voicePreset.Library.TryGetValue("start", mora.Item1, out int start))
+                if (!mainVoice.Library.TryGetValue("start", mora.Item1, out int start))
                 {
                     start = 0;
                 }
-                if (!voicePreset.Library.TryGetValue("fixed", mora.Item1, out int fix))
+                if (!mainVoice.Library.TryGetValue("fixed", mora.Item1, out int fix))
                 {
                     fix = 0;
                 }
@@ -408,9 +404,9 @@ namespace UtaTalkEngine
                     {
                         // 大きすぎる音はつぶす（コンプレッサー）
                         var threshold = 0.2;
-                        if (voicePreset.Library.Settings?.Doubles?.ContainsKey("comp") == true)
+                        if (mainVoice.Library.Settings?.Doubles?.ContainsKey("comp") == true)
                         {
-                            threshold = Math.Clamp(voicePreset.Library.Settings.Doubles["comp"].Value, 0.01, 1);
+                            threshold = Math.Clamp(mainVoice.Library.Settings.Doubles["comp"].Value, 0.01, 1);
                         }
                         for (int i = 0; i < ctrlPoints.Length; i++)
                         {
@@ -672,7 +668,7 @@ namespace UtaTalkEngine
             return pitOrg + shift;
         }
 
-        public async Task Save(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript[] talkScripts, MasterEffectValue masterEffect, string filePath, int startPause, int endPause, bool saveWithText, Encoding encoding)
+        public override async Task Save(VoiceConfig voicePreset, VoiceConfig subPreset, TalkScript[] talkScripts, MasterEffectValue masterEffect, string filePath, int startPause, int endPause, bool saveWithText, Encoding encoding)
         {
             var fs = 44100;
             var waveList = new List<double>();
@@ -741,7 +737,7 @@ namespace UtaTalkEngine
             }
         }
 
-        public async Task<bool> Stop()
+        public override async Task<bool> Stop()
         {
             if (!isPlaying) { return true; }
             stopFlag = true;
@@ -753,8 +749,9 @@ namespace UtaTalkEngine
             return !stopFlag;
         }
 
-        public async Task<TalkScript> GetDictionary(string text)
+        public override async Task<TalkScript> GetDictionary(string text)
         {
+            await Task.Delay(100);
             return null;
         }
     }

@@ -86,7 +86,7 @@ namespace UtaTalkEngine
                 {
                     sub.Add(list[i + 1] - list[i]); // ゼロクロスの距離を算出
                 }
-                var maxLength = sub.Max(); // 最大の距離
+                var maxLength = sub.Count > 0 ? sub.Max() : 0; // 最大の距離
                 var limit = maxLength * saveRate;
                 int removeNum = 0; // 削るサンプル数
                 for (int i = 0; i < sub.Count; i++)
@@ -119,7 +119,7 @@ namespace UtaTalkEngine
                 {
                     sub.Add(list[i + 1] - list[i]); // ゼロクロスの距離を算出
                 }
-                var maxLength = sub.Max(); // 最大の距離
+                var maxLength = sub.Count > 0 ? sub.Max() : 0; // 最大の距離
                 var limit = maxLength * saveRate;
                 int removeNum = 0; // 削るサンプル数
                 for (int i = 0; i < sub.Count; i++)

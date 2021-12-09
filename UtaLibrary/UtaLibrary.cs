@@ -10,10 +10,8 @@ using Yomiage.SDK.Settings;
 
 namespace UtaLibrary
 {
-    public class UtaLibrary : IVoiceLibrary
+    public class UtaLibrary : VoiceLibraryBase
     {
-        private string ConfigDirectory;
-        private string DllDirectory;
         private string VoiceDirectory;
         private List<Oto> OtoList = new List<Oto>();
         private int fs = 44100;
@@ -28,38 +26,37 @@ namespace UtaLibrary
                 return asm.GetName().Version;
             }
         }
-        public int MajorVersion => version.Major;
-        public int MinorVersion => version.Minor;
+        public override int MajorVersion => version.Major;
+        public override int MinorVersion => version.Minor;
 
 
-        public LibraryConfig Config { get; private set; }
 
-        public LibrarySettings Settings { get; set; }
+        public override bool IsActivated => true;
 
-        public bool IsActivated => true;
+        public override bool IsEnable => true;
 
-        public bool IsEnable => true;
+        public override string StateText { get; protected set; } = string.Empty;
 
-        public string StateText { get; private set; } = string.Empty;
-
-        public async Task<bool> Activate(string key)
+        public override async Task<bool> Activate(string key)
         {
+            await Task.Delay(100);
             StateText = "アクティベートされました。";
             return true;
         }
 
-        public async Task<bool> DeActivate()
+        public override async Task<bool> DeActivate()
         {
+            await Task.Delay(100);
             StateText = "ディアクティベートされました。";
             return false;
         }
 
 
-        public void Dispose()
+        public override void Dispose()
         {
         }
 
-        public object GetValue(string command, string key)
+        public override object GetValue(string command, string key)
         {
             StateText = "呼び出されました。command = " + command + ", key = " + key;
 
@@ -173,7 +170,7 @@ namespace UtaLibrary
             return key;
         }
 
-        public bool TryGetValue<T>(string command, string key, out T value)
+        public override bool TryGetValue<T>(string command, string key, out T value)
         {
             var result = GetValue(command, key);
             if (command.ToLower() == "wave" &&
@@ -200,7 +197,7 @@ namespace UtaLibrary
             return false;
         }
 
-        public Dictionary<string, object> GetValues(string command, string[] keys)
+        public override Dictionary<string, object> GetValues(string command, string[] keys)
         {
             var dict = new Dictionary<string, object>();
             keys = keys.Distinct().ToArray();
@@ -211,7 +208,7 @@ namespace UtaLibrary
             return dict;
         }
 
-        public bool TryGetValues<T>(string command, string[] keys, out Dictionary<string, T> values)
+        public override bool TryGetValues<T>(string command, string[] keys, out Dictionary<string, T> values)
         {
             values = new Dictionary<string, T>();
             keys = keys.Distinct().ToArray();
@@ -225,11 +222,10 @@ namespace UtaLibrary
             return values.Count > 0;
         }
 
-        public void Initialize(string configDirectory, string dllDirectory, LibraryConfig config)
+        public override void Initialize(string configDirectory, string dllDirectory, LibraryConfig config)
         {
-            this.Config = config;
-            this.ConfigDirectory = configDirectory;
-            this.DllDirectory = dllDirectory;
+            base.Initialize(configDirectory, dllDirectory, config);
+
             this.VoiceDirectory = Path.Combine(dllDirectory, "voice");
             var otoFile = Path.Combine(VoiceDirectory, "oto.ini");
             LoadOtoIni(otoFile);
